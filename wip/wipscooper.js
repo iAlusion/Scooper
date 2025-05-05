@@ -1,5 +1,5 @@
 const { HDNodeWallet } = require('ethers'),
-      wordlist = require('./wordlist.json'),
+      wordlist = require('../wordlist.json'),
       axios = require('axios'),
       cheerio = require('cheerio');
 
