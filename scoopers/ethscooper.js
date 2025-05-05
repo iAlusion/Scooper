@@ -1,5 +1,5 @@
 const { HDNodeWallet, WebSocketProvider, getIndexedAccountPath } = require('ethers'),
-      list = require('./wordlist.json');
+      list = require('../wordlist.json');
 
 class Scooper {
     constructor() {
