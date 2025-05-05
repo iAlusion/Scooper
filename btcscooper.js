@@ -17,7 +17,7 @@ const bip39 = require('bip39'),
 class BtcScooper {
     constructor() {
 
-        this.shouldRun = true;
+        this.shouldRun = false;
 
         this.totalRan = 0;
 

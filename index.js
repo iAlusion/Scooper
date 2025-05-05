@@ -1,19 +1,34 @@
-const eth = require('./ethscooper.js'),
-      scooper = new eth();
+const ETHScooper = require('./ethscooper.js'),
+      BTCScooper = require('./btcscooper.js'),
+      ethScooper = new ETHScooper(),
+      btcScooper = new BTCScooper;
 
-console.log('ETH Scooper started')
+// combine eth/btc logs
 
-process.stdout.write(`Total Ran: ${scooper.totalRan}`);
+if(ethScooper.shouldRun === true) {
+    setInterval(() => {
+        ethScooper.scoop();
+    }, 100);
+    console.log('ETH Scooper started')
+}
 
-setInterval(() => {
-    if(scooper.shouldRun === false) return undefined;
-    else scooper.scoop();
-}, 100);
+if(btcScooper.shouldRun === true) {
+    setInterval(() => {
+        btcScooper.scoop();
+    }, 100);
+    console.log('BTC Scooper started')
+}
 
-setInterval(() => {
-    process.stdout.cursorTo(11)
-
-    process.stdout.clearLine(1);
-
-    process.stdout.write(String(scooper.totalRan));
-}, 5000)
+if(btcScooper.shouldRun && ethScooper.shouldRun) {
+    process.stdout.write(`BTC Ran: ${btcScooper.totalRan} | ETH Ran: ${ethScooper.totalRan}`);
+} 
+else {
+    process.stdout.write(`${btcScooper.shouldRun === true ? 'BTC' : 'ETH' } Ran: ${btcScooper.shouldRun === true ? btcScooper.totalRan : ethScooper.totalRan}`);
+        setInterval(() => {
+            process.stdout.cursorTo(11)
+        
+            process.stdout.clearLine(1);
+        
+            process.stdout.write(String(btcScooper.shouldRun === true ? btcScooper.totalRan : ethScooper.totalRan));
+        }, 5000)
+};
