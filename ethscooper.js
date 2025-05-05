@@ -1,11 +1,10 @@
 const { HDNodeWallet, WebSocketProvider, getIndexedAccountPath } = require('ethers'),
-      list = require('./wordlist.json'),
-      { WSS_URL } = require('./env');
+      list = require('./wordlist.json');
 
 class Scooper {
     constructor() {
 
-        this.provider = new WebSocketProvider(WSS_URL);
+        this.provider = new WebSocketProvider(process.env.WSS_URL);
 
         this.shouldRun = true;
 
