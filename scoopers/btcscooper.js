@@ -3,7 +3,8 @@ const bip39 = require('bip39'),
       { BIP32Factory } = require('bip32'),
       bip32 = BIP32Factory(ecc),
       crypto = require('crypto'),
-      bitcoin = require('bitcoinjs-lib');
+      bitcoin = require('bitcoinjs-lib'),
+      { JsonRpcProvider } = require('ethers');
 
       /** 
        * @todo => {
@@ -17,31 +18,33 @@ const bip39 = require('bip39'),
 class BtcScooper {
     constructor() {
 
-        this.shouldRun = false;
+        this.shouldRun = process.env.btcRun;
+
+        this.provider = new JsonRpcProvider(process.env.btcURL)
 
         this.totalRan = 0;
 
     }
 
     getAddress (node, network) {
-        return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network }).address
+        return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network: bitcoin.networks.bitcoin }).address
     }
 
     async wallet() {
         this.totalRan += 1;
         const randomBytes = crypto.randomBytes(16);
-                console.log(randomBytes);
+                //console.log(randomBytes);
         const phrase = bip39.entropyToMnemonic(randomBytes.toString('hex'));
                 console.log(phrase);
         const seed = bip39.mnemonicToSeedSync(phrase);
-                console.log(seed);
+                //console.log(seed);
         const root = bip32.fromSeed(seed, bitcoin.networks.bitcoin);
-                console.log(root);
+                //console.log(root);
 
         const child = root.derivePath("m/44'/0'/0'"),
-              address = this.getAddress(child);
-              //lookup = await this.btcLookup(address);
-
+              address = this.getAddress(child),
+              lookup = await this.btcLookup(address);
+            return undefined;
         const wallet = {
             address: address,
             pubKey: child.publicKey.toString('hex'),
@@ -55,27 +58,21 @@ class BtcScooper {
         }
 
         //if(wallet.Balance !== 0) console.log(`[ Running Phrase: ] ${phrase}`);
-            console.log(wallet);
+            //console.log(wallet);
         return wallet;
     }
 
     async btcLookup(address) {
-        const fetched = await fetch(`https://btcbook.nownodes.io/api/v2/address/${address}`, {
-            headers: {
-                "api-key": process.env.btckey
-            }
-        });
+        const test = await this.provider.getBalance(address);
 
-        const parsed = await fetched.json();
-
-        return parsed;
+        return test;
     }
 
     async scoop() {
 
         const wallet = await this.wallet();
 
-            if(wallet.Balance === 0) return undefined;
+            if(wallet == undefined || wallet.Balance === 0) return undefined;
 
             console.log(`[ Result: ]`);
             console.log(wallet);

@@ -4,9 +4,9 @@ const { HDNodeWallet, WebSocketProvider, getIndexedAccountPath } = require('ethe
 class Scooper {
     constructor() {
 
-        this.provider = new WebSocketProvider(process.env.URL);
+        this.provider = new WebSocketProvider(process.env.ethURL);
 
-        this.shouldRun = true;
+        this.shouldRun = process.env.ethRun;
 
         this.totalRan = 0;
 
