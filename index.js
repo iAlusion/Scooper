@@ -1,5 +1,5 @@
-const ETHScooper = require('./ethscooper.js'),
-      BTCScooper = require('./btcscooper.js'),
+const ETHScooper = require('./scoopers/ethscooper.js'),
+      BTCScooper = require('./scoopers/btcscooper.js'),
       ethScooper = new ETHScooper(),
       btcScooper = new BTCScooper;
 
