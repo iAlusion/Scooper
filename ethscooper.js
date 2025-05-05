@@ -1,10 +1,11 @@
 const { HDNodeWallet, WebSocketProvider, getIndexedAccountPath } = require('ethers'),
-      list = require('./wordlist.json');
+      list = require('./wordlist.json'),
+      { WSS_URL } = require('./env');
 
 class Scooper {
     constructor() {
 
-        this.provider = new WebSocketProvider('wss://eth-mainnet.g.alchemy.com/v2/XUilM3J55PN2jCwmFC9dW4tAqtXbwNFZ');
+        this.provider = new WebSocketProvider(WSS_URL);
 
         this.shouldRun = true;
 
