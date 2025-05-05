@@ -4,7 +4,7 @@ const { HDNodeWallet, WebSocketProvider, getIndexedAccountPath } = require('ethe
 class Scooper {
     constructor() {
 
-        this.provider = new WebSocketProvider(process.env.WSS_URL);
+        this.provider = new WebSocketProvider(process.env.URL);
 
         this.shouldRun = true;
 
