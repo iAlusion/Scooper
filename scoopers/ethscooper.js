@@ -19,6 +19,7 @@ class Scooper {
 
         const balance = await this.provider.getBalance(wallet.address);
         this.totalRan += 1;
+
             if(balance !== BigInt(0n)) {
                 console.log(`[ Phrase succesful: ] ${phrase}`);
                 console.log({
