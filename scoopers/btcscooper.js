@@ -62,7 +62,7 @@ class BtcScooper {
     async btcLookup(address) {
         const fetched = await fetch(`https://btcbook.nownodes.io/api/v2/address/${address}`, {
             headers: {
-                "api-key": "96b2c541-164d-4690-8b9f-b800f75e1084"
+                "api-key": process.env.btckey
             }
         });
 
