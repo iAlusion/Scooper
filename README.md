@@ -4,7 +4,7 @@
 
 
 # For educational use only
-    I do not support mass use of this as it shows that it is possible to grab peoples wallets without too much hassle.
+I do not support mass use of this as it shows that it is possible to grab peoples wallets without too much hassle.
 
 - Eth complete
 - BTC WIP
