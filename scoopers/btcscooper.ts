@@ -1,10 +1,9 @@
-const bip39 = require('bip39'),
-      ecc = require('tiny-secp256k1'),
-      { BIP32Factory } = require('bip32'),
-      bip32 = BIP32Factory(ecc),
-      crypto = require('crypto'),
-      bitcoin = require('bitcoinjs-lib'),
-      { JsonRpcProvider } = require('ethers');
+import { JsonRpcProvider } from "ethers";
+import bip39 from 'bip39';
+//import ecc from 'tiny-secp256k1';
+import { BIP32Factory, BIP32Interface } from 'bip32';
+import crypto from 'crypto';
+import bitcoin from 'bitcoinjs-lib';
 
       /** 
        * @todo => {
@@ -14,11 +13,21 @@ const bip39 = require('bip39'),
        * 
       */
 
+export type BtcOptions = {
+    run: boolean,
+    timegap: number,
+    url: string
+}
 
-class BtcScooper {
-    constructor() {
+export default class BtcScooper {
 
-        this.shouldRun = process.env.btcRun;
+    shouldRun: boolean
+    provider: JsonRpcProvider
+    totalRan: number
+
+    constructor(options: BtcOptions) {
+
+        this.shouldRun = false
 
         this.provider = new JsonRpcProvider(process.env.btcURL)
 
@@ -26,7 +35,7 @@ class BtcScooper {
 
     }
 
-    getAddress (node, network) {
+    getAddress (node) {
         return bitcoin.payments.p2pkh({ pubkey: node.publicKey, network: bitcoin.networks.bitcoin }).address
     }
 
@@ -80,5 +89,3 @@ class BtcScooper {
         return undefined;
     }
 }
-
-module.exports = BtcScooper;
