@@ -1,24 +1,24 @@
-//import BtcScooper, { BtcOptions } from "./scoopers/btcscooper.ts";
+import BtcScooper, { BtcOptions } from "./scoopers/btcscooper.ts";
 import { EthScooper } from "./scoopers/ethscooper.ts";
 import type { EthOptions } from "./scoopers/ethscooper.ts";
 
 export default class Controller {
 
     ethScooper: EthScooper | undefined
-    //btcScooper: BtcScooper | undefined
+    btcScooper: BtcScooper | undefined
 
     constructor(options: {
         eth?: EthOptions
-        //btc?: BtcOptions
+        btc?: BtcOptions
     }) {
 
         this.ethScooper = undefined;
 
             if(options?.eth?.run && options.eth.run === true) this.ethScooper = new EthScooper(options.eth);
         
-        //this.btcScooper = undefined;
+        this.btcScooper = undefined;
 
-            //if(options?.btc?.run && options.btc.run === true) this.btcScooper = new BtcScooper(options.btc);
+            if(options?.btc?.run && options.btc.run === true) this.btcScooper = new BtcScooper(options.btc);
     }
 
     /*
@@ -44,7 +44,7 @@ export default class Controller {
     }
 
     log() {
-        const temp = undefined
+        const temp = undefined //temporary
 
         /*if(this.ethScooper instanceof EthScooper && this.btcScooper instanceof BtcScooper) {
             process.stdout.write(`BTC Ran: ${this.btcScooper.totalRan} | ETH Ran: ${this.ethScooper.totalRan}`);

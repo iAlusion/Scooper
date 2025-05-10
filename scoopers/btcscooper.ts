@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from "ethers";
 import bip39 from 'bip39';
 //import ecc from 'tiny-secp256k1';
-import { BIP32Factory, BIP32Interface } from 'bip32';
+import BIP32Factory, { BIP32Interface } from 'bip32';
 import crypto from 'crypto';
 import bitcoin from 'bitcoinjs-lib';
 
@@ -14,25 +14,42 @@ import bitcoin from 'bitcoinjs-lib';
       */
 
 export type BtcOptions = {
-    run: boolean,
-    timegap: number,
+    run: boolean
+    timegap?: number
     url: string
+    phraseLength?: 12
 }
 
 export default class BtcScooper {
 
-    shouldRun: boolean
-    provider: JsonRpcProvider
+    provider: JsonRpcProvider | undefined
+    timegap?: number
+    phraseLength?: number
+    url: string
     totalRan: number
+    //fac32
 
     constructor(options: BtcOptions) {
 
-        this.shouldRun = false
+        this.url = options.url
 
-        this.provider = new JsonRpcProvider(process.env.btcURL)
+        this.provider = undefined;
 
         this.totalRan = 0;
 
+        //this.fac32 = BIP32Factory(ecc)
+
+        this.setProvider()
+
+    }
+
+    setProvider() {
+        try{
+            const provider = new JsonRpcProvider(this.url)
+             this.provider = provider;
+        } catch(err) {
+            throw err;
+        }
     }
 
     getAddress (node) {
@@ -47,7 +64,7 @@ export default class BtcScooper {
                 console.log(phrase);
         const seed = bip39.mnemonicToSeedSync(phrase);
                 //console.log(seed);
-        const root = bip32.fromSeed(seed, bitcoin.networks.bitcoin);
+        const root = BIP32Factory.fromSeed() //    .fromSeed(seed, bitcoin.networks.bitcoin);
                 //console.log(root);
 
         const child = root.derivePath("m/44'/0'/0'"),
@@ -72,7 +89,7 @@ export default class BtcScooper {
     }
 
     async btcLookup(address) {
-        const test = await this.provider.getBalance(address);
+        const test = await this.provider?.getBalance(address);
 
         return test;
     }

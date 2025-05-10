@@ -10,7 +10,7 @@ export type EthOptions = {
 
 export class EthScooper {
 
-    provider: WebSocketProvider
+    provider: WebSocketProvider | undefined
     timegap: number | undefined
     url: string
     phraseLength: number
@@ -18,7 +18,7 @@ export class EthScooper {
 
     constructor(options: EthOptions) {
 
-        this.provider = new WebSocketProvider(options.url);
+        this.provider = undefined;
 
         this.timegap = options.timegap ? options.timegap : 100
 
@@ -28,6 +28,17 @@ export class EthScooper {
         
         this.totalRan = 0;
 
+        this.setProvider(this.url);
+
+    }
+
+    setProvider(url: string) {
+        try {
+            const provider = new WebSocketProvider(url);
+                this.provider = provider;
+        } catch(err) {
+            throw err;
+        }
     }
 
     async scoop() {
@@ -36,15 +47,18 @@ export class EthScooper {
 
             if(wallet === false) return undefined;
 
-        const balance = await this.provider.getBalance(wallet.address);
+        const balance = await this.provider?.getBalance(wallet.address);
             this.totalRan += 1;
+
+            if(balance === undefined) return undefined;
 
             if(balance !== BigInt(0n)) {
                 console.log(`[ Phrase succesful: ] ${phrase}`);
                 console.log({
                     Address: wallet.address,
                     PubKey: wallet.publicKey,
-                    Balance: balance
+                    Balance: balance,
+                    wallet
                 })
             }
         return undefined;
